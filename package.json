@@ -1,6 +1,6 @@
 {
   "name": "postcodenl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A rest client for the postcode.nl api.",
   "main": "index.js",
   "scripts": {},
