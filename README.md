@@ -1,5 +1,7 @@
 # PostCode.nl REST Client
 
+[![npm](https://img.shields.io/npm/v/postcodenl.svg)](https://www.npmjs.com/package/postcodenl) [![npm](https://img.shields.io/npm/dw/postcodenl.svg)](https://www.npmjs.com/package/postcodenl) [![npm](https://img.shields.io/npm/dt/postcodenl.svg)](https://www.npmjs.com/package/postcodenl)
+
 A rest client for the postcode.nl api.
 
 ## Author
