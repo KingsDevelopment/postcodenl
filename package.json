@@ -1,5 +1,5 @@
 {
-  "name": "PostcodeNL",
+  "name": "postcodenl",
   "version": "1.0.0",
   "description": "A rest client for the postcode.nl api.",
   "main": "index.js",
@@ -9,7 +9,7 @@
     "url": "git+https://github.com/KingsDevelopment/postcodenl.git"
   },
   "keywords": [
-    "postcodenl"
+    "postcodenl",
     "address api",
     "rest client",
     "lat lon api"
