@@ -1,0 +1,26 @@
+{
+  "name": "PostcodeNL",
+  "version": "1.0.0",
+  "description": "A rest client for the postcode.nl api.",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KingsDevelopment/postcodenl.git"
+  },
+  "keywords": [
+    "postcodenl"
+    "address api",
+    "rest client",
+    "lat lon api"
+  ],
+  "author": "Jurien Hamaker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KingsDevelopment/postcodenl/issues"
+  },
+  "homepage": "https://github.com/KingsDevelopment/postcodenl#readme",
+  "dependencies": {
+    "needle": "~2.1.0"
+  }
+}
