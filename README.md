@@ -7,6 +7,9 @@ A rest client for the postcode.nl api.
 ## Author
 [Jurien Hamaker](https://kings-dev.io)
 
+## Issues
+If you encounter any issues using this package, please report them at the [issues tab](https://github.com/KingsDevelopment/postcodenl/issues) of the github repository
+
 
 ## Usage
 
