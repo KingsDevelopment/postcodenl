@@ -61,7 +61,7 @@ class postCodeNL {
 
 		let postcodeNumber = parseInt(postcode.substr(0, 4));
 
-		if(isNan(postcodeNumber)) {
+		if(isNaN(postcodeNumber)) {
 			let err = new Error("first 4 characters of postcode must be a number.");
 			throw err;
 		}
@@ -173,7 +173,7 @@ class postCodeNL {
 
 		let postcodeNumber = parseInt(postcode.substr(0, 4));
 
-		if(isNan(postcodeNumber)) {
+		if(isNaN(postcodeNumber)) {
 			let err = new Error("first 4 characters of postcode must be a number.");
 			throw err;
 		}
