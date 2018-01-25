@@ -40,9 +40,7 @@ class postCodeNL {
 		});
 
 		if('exception' in result.body) {
-			let err = new Error(result.body.exception);
-			err.code = result.body.exceptionId ? result.body.exceptionId : null;
-			throw err;
+			return this.errorHandler(result.body);
 		}
 
 		return result.body;
@@ -51,24 +49,28 @@ class postCodeNL {
 	viewByPostcode (postcode, houseNumber, houseNumberAddition = '') {
 		if(!postcode) {
 			let err = new Error("postcode is a required.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 		
 		if(!houseNumber) {
 			let err = new Error("houseNumber is a required.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		let postcodeNumber = parseInt(postcode.substr(0, 4));
 
 		if(isNaN(postcodeNumber)) {
 			let err = new Error("first 4 characters of postcode must be a number.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		if(postcodeNumber < 1000 || postcodeNumber > 9999) {
 			let err = new Error("first 4 characters of postcode must be between 1000 and 9999.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 		return this._runClient("/addresses/postcode/{postcode}/{houseNumber}/{houseNumberAddition}", {
 			postcode: postcode,
@@ -80,17 +82,20 @@ class postCodeNL {
 	matchExact (city, street, houseNumber, houseNumberAddition = '') {
 		if(!city) {
 			let err = new Error("city is a required.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 		
 		if(!street) {
 			let err = new Error("street is a required.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 		
 		if(!houseNumber) {
 			let err = new Error("houseNumber is a required.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		return this._runClient("/addresses/exact/{city}/{street}/{houseNumber}/{houseNumberAddition}", {
@@ -104,32 +109,38 @@ class postCodeNL {
 	viewByRd (rdX, rdY) {
 		if(!rdX) {
 			let err = new Error("rdX is a required.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 		
 		if(!rdY) {
 			let err = new Error("rdY is a required.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		if(isNaN(rdX)) {
 			let err = new Error("rdX must be a number.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		if(rdX < 0 || rdX > 300000) {
 			let err = new Error("rdX must be between 0 and 300000.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		if(isNaN(rdY)) {
 			let err = new Error("rdY must be a number.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		if(rdY < 300000 || rdY > 620000) {
 			let err = new Error("rdY must be between 300000 and 620000.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		return this._runClient("/addresses/rd/{rdX}/{rdY}", {
@@ -141,22 +152,26 @@ class postCodeNL {
 	latlon (latitude, longitude) {
 		if(!latitude) {
 			let err = new Error("latitude is a required.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 		
 		if(!longitude) {
 			let err = new Error("longitude is a required.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		if(isNaN(latitude)) {
 			let err = new Error("latitude must be a number.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		if(isNaN(longitude)) {
 			let err = new Error("longitude must be a number.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		return this._runClient("/addresses/latlon/{latitude}/{longitude}", {
@@ -168,24 +183,61 @@ class postCodeNL {
 	postcodeRanges (postcode) {
 		if(!postcode) {
 			let err = new Error("postcode is a required.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		let postcodeNumber = parseInt(postcode.substr(0, 4));
 
 		if(isNaN(postcodeNumber)) {
 			let err = new Error("first 4 characters of postcode must be a number.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		if(postcodeNumber < 1000 || postcodeNumber > 9999) {
 			let err = new Error("first 4 characters of postcode must be between 1000 and 9999.");
-			throw err;
+			err.status = 400;
+			return this.errorHandler(err);
 		}
 
 		return this._runClient("/postcode-ranges/postcode/{postcode}", {
 			postcode: postcode
 		});
+	}
+
+	errorHandler (error) {
+		if(error instanceof Error) {
+			if(error.status) {
+				throw error;
+			}
+		}
+
+		let err;
+		if('exceptionId' in error) {
+			switch(error.exceptionId) {
+				case 'PostcodeNl_Controller_Address_HouseNumberParameterTooLargeException':
+					err = new Error(error.exception ? error.exception : "An unknown error has occured.");
+					err.status = 400;
+					err.code = 'HouseNumberParameterTooLargeException';
+					throw err;
+				case 'PostcodeNl_Service_PostcodeAddress_AddressNotFoundException':
+					err = new Error(error.exception ? error.exception : "An unknown error has occured.");
+					err.status = 400;
+					err.code = 'AddressNotFoundException';
+					throw err;
+				default:
+					err = new Error(error.exception ? error.exception : "An unknown error has occured.");
+					err.status = 500;
+					err.code = error.exceptionId;
+					throw err;
+			}
+		}
+
+		err = new Error("An unknown error has occured.");
+		err.status = 500;
+		err.code = 'unkownError';
+		throw err;
 	}
 }
 
